@@ -1,0 +1,19 @@
+/* CSS Mini Reset */
+html, body, div, form, fieldset, legend, label, ul, ol, p, h1, h2, h3, h4, h5, h6, pre {
+    margin: 0;
+    padding: 0;	
+}
+body { font: 12px/1.5 tahoma,arial,宋体,sans-serif; }
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+th, td {
+    text-align: left;
+    vertical-align: top;
+}
+h1, h2, h3, h4, h5, h6, th, td, caption { font-weight:normal; }
+img { border: 0; }
+ol, ul { list-style: none; }
+a { text-decoration: none; }
+a:hover { text-decoration: underline; }
