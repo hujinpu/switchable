@@ -39,8 +39,10 @@
                 host.$container.hover(function(evt) {
                     host.paused = true;
                 }, function(evt) {
+                    // because target can be child of evt set container
+                    if (evt.currentTarget !== evt.target && host.$container.has(evt.target).length === 0) return;
+
                     // setTimeout interval 是为了确保自动播放的间隔不会小于间隔时间
-                    if (evt.currentTarget !== evt.target) return;
                     setTimeout(function() {
                         host.paused = false;
                     }, config.interval * 1000);
