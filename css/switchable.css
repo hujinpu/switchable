@@ -17,8 +17,8 @@ pre {
     position: relative;
     width: 750px;
 }
-#demo1 .zhangyu { position: absolute; left: 20px; margin-top: -29px; z-index: 99; }
-#demo1 .zhangyu li {
+#demo1 .jinpu { position: absolute; left: 20px; margin-top: -29px; z-index: 99; }
+#demo1 .jinpu li {
     float: left;
     width: 130px;
     height: 27px;
@@ -29,7 +29,7 @@ pre {
     padding-top: 8px;
     cursor: pointer;
 }
-#demo1 .zhangyu li.active { background-position: 0 -40px; cursor: default; }
+#demo1 .jinpu li.active { background-position: 0 -40px; cursor: default; }
 #demo1 .able-switchable-content {
     position: relative;
     height: 120px;

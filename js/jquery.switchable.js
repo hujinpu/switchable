@@ -130,7 +130,7 @@
             // update activeIndex
             self.activeIndex = index;
 
-            self.$evtBDObject.trigger(EVENT_AFTER_SWITCH, [index]);
+            self.$evtBDObject.trigger(EVENT_AFTER_SWITCH, [index]);  //# 是否还未完全实现
         },
 
         /**

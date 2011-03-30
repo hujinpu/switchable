@@ -4,7 +4,7 @@
  * depend on jquery.lazyload.js
  */
 (function($) {
-    var IMG_SRC = 'img-src', TEXTAREA_DATA = 'textarea-data', LAZYDATAFLAG = 'lazyload-src',
+    var DATA_TEXTAREA = 'data-textarea', DATA_IMG = 'data-img',
         EVENT_BEFORE_SWITCH = 'beforeSwitch';
 
     $.extend($.fn.switchable.defaults, {
@@ -16,15 +16,10 @@
 
         /**
          * @cfg String lazyDataType 
-         * 默认为img-src，目前支持图片延迟加载，将来支持文本数据和脚步延迟加载。
+         * 默认为data-img，目前支持图片延迟加载，将来支持文本数据和脚步延迟加载。
          */
-        lazyDataType: IMG_SRC, // or textarea-data
+        lazyDataType: DATA_IMG // or DATA_TEXTAREA
 
-        /**
-         * @cfg String lazyDataFlag
-         * 默认为lazyload-src，通过指定的html自定义属性获取真实数据
-         */
-        lazyDataFlag: LAZYDATAFLAG
     });
 
     var Switchable = $.able.Switchable;
@@ -37,7 +32,7 @@
             if (!config.lazyload) return;
 
             var panels = $.makeArray(host.$panels);
-            var type = config.lazyDataType, flag = config.lazyDataFlag;
+            var type = config.lazyDataType;
 
             host.$evtBDObject.bind(EVENT_BEFORE_SWITCH, loadLazyData);
 
@@ -49,7 +44,7 @@
                     begin = index * step,
                     end = begin + step;
 
-                $.loadCustomLazyData(panels.slice(begin, end), type, flag);
+                $.loadCustomLazyData(panels.slice(begin, end), type);
 
                 if (isAllDone()) {
                     host.$evtBDObject.unbind(EVENT_BEFORE_SWITCH, loadLazyData);
@@ -62,12 +57,12 @@
             function isAllDone() {
                 var $imgs, isDone = true; 
 
-                if (type === IMG_SRC) {
+                if (type === DATA_IMG) {
 
                     $imgs = panels[0].nodeName == 'IMG' ? host.$panels : host.$panels.find('img');
 
                     $imgs.each(function() {
-                        if (this.getAttribute(flag)) {
+                        if (this.getAttribute(type)) {
                             isDone = false;
                             return false;
                         }

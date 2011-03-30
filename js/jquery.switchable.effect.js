@@ -43,7 +43,13 @@
          * @cfg String easing
          * 默认为liner，即线性的。
          */
-        easing: LINER
+        easing: LINER,
+
+        /**
+         * @cfg Boolean circle
+         * 默认为false，如果设置为true，最后一帧到第一帧切换的时候会更加平滑。
+         */
+        circle: false
     });
 
     /**
@@ -96,6 +102,19 @@
                 diff = self.viewSize[isX ? 0 : 1] * index,
                 attributes = {};
 
+            var $first, _diff;
+            if (config.circle && index == 0 && self.activeIndex == self.viewLength-1) {
+                $first = $(toPanels);
+                if (!self.$container.data('switchables-circle_appended')) {
+                    $first.parent().append( $first.clone() );
+                    self.$container.data('switchables-circle_appended', true);
+                    if (isX)
+                        $first.parent().css('width', self.viewSize[0] * (self.viewLength +1) + 'px');
+                }
+                _diff = diff;
+                diff = self.viewSize[isX ? 0 : 1] * self.viewLength;
+            }
+
             attributes[isX ? 'left' : 'top'] = -diff;
             $.extend(attributes, {
                 duration: config.duration,
@@ -105,6 +124,11 @@
             if (self.$anim) self.$anim.clearQueue();
 
             self.$anim = self.$panels.parent().animate(attributes, function() {
+                if ($first) {
+                //  $first.parent().children(':gt('+ (self.viewLength-1) +')').remove();  //# IE8 下会有显示问题，若先设置 top 再删除多余元素
+                    $first.parent().css( isX ? 'left' : 'top', _diff);
+                    $first = null;
+                }
                 self.$anim = null; // free
                 callback();
             });

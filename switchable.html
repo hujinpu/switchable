@@ -99,17 +99,17 @@ $('#demo3').switchable({effect: 'fade', duration: 0.8, delay: 0.2, autoplay: tru
                     <img src="img/imgview4.jpg" />
                     <img src="img/imgview5.jpg" />
                     <!-- 5-10 -->
-                    <img lazyload-src="img/imgview6.jpg" />
-                    <img lazyload-src="img/imgview7.jpg" />
-                    <img lazyload-src="img/imgview8.jpg" />
-                    <img lazyload-src="img/imgview9.jpg" />
-                    <img lazyload-src="img/imgview10.jpg" />
+                    <img data-img="img/imgview6.jpg" />
+                    <img data-img="img/imgview7.jpg" />
+                    <img data-img="img/imgview8.jpg" />
+                    <img data-img="img/imgview9.jpg" />
+                    <img data-img="img/imgview10.jpg" />
                     <!-- 10-15 -->
-                    <img lazyload-src="img/imgview11.jpg" />
-                    <img lazyload-src="img/imgview12.jpg" />
-                    <img lazyload-src="img/imgview13.jpg" />
-                    <img lazyload-src="img/imgview14.jpg" />
-                    <img lazyload-src="img/imgview15.jpg" />
+                    <img data-img="img/imgview11.jpg" />
+                    <img data-img="img/imgview12.jpg" />
+                    <img data-img="img/imgview13.jpg" />
+                    <img data-img="img/imgview14.jpg" />
+                    <img data-img="img/imgview15.jpg" />
                 </div>
                 <ul class="able-switchable-nav">
                     <li class="active">&bull;</li>
@@ -124,7 +124,8 @@ var $demo4 = $('#demo4').switchable({
     effect: 'scrollx',
     step: 5,
     viewSize: [680],
-    lazyload: true
+    lazyload: true,
+    circle: true
 });
 
 // 上一页
@@ -218,7 +219,7 @@ $('#demo5').switchable({hasTriggers: false, autoplay: true, effect: 'scrolly'})
         </div>
 
         <pre>实现代码：
-var $slideFocus = $('#slideFocus').switchable({autoplay: true, effect: 'scrollx'});
+var $slideFocus = $('#slideFocus').switchable({autoplay: true, effect: 'scrollx', circle: true});
 
 $slideFocus.data('switchables')[0].beforeSwitch(function(evt, toIndex) {
     $('.desc-list li').each(function(index, value) {
@@ -249,7 +250,7 @@ $slideFocus.data('switchables')[0].beforeSwitch(function(evt, toIndex) {
 $('#accordion1').switchable({type: 1});
         </pre>
 
-        <script src="js/jquery-1.4.2.min.js"></script>
+        <script src="js/jquery-1.5.1.min.js"></script>
         <script src="js/jquery.switchable.js"></script>
         <script src="js/jquery.switchable.autoplay.js"></script>
         <script src="js/jquery.switchable.effect.js"></script>
@@ -257,9 +258,9 @@ $('#accordion1').switchable({type: 1});
         <script src="js/jquery.lazyload.js"></script>
         <script>
             jQuery(function($) {
-                $('#demo1').switchable({delay: 0.5, navCls: 'jinpu'});
+                $('#demo1').switchable({delay: 0.5, navCls: 'jinpu', events:['click']});
 
-                $('#demo2').switchable({effect: 'scrolly', autoplay: true});
+                $('#demo2').switchable({effect: 'scrollx', autoplay: true, interval: 2, events: ['click'], circle: true});
 
                 $('#demo3').switchable({effect: 'fade', duration: 0.8, delay: 0.2, autoplay: true});
 
@@ -267,7 +268,8 @@ $('#accordion1').switchable({type: 1});
                     effect: 'scrollx',
                     step: 5,
                     viewSize: [680],
-                    lazyload: true
+                    lazyload: true,
+                    circle: true
                 });
 
                 // 上一页
@@ -284,7 +286,7 @@ $('#accordion1').switchable({type: 1});
                 $('#demo5').switchable({hasTriggers: false, autoplay: true, effect: 'scrolly'})
 
 
-                var $slideFocus = $('#slideFocus').switchable({autoplay: true, effect: 'scrollx'});
+                var $slideFocus = $('#slideFocus').switchable({autoplay: true, effect: 'scrollx', circle: true});
 
                 $slideFocus.data('switchables')[0].beforeSwitch(function(evt, toIndex) {
                     $('.desc-list li').each(function(index, value) {
