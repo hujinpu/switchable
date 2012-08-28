@@ -49,7 +49,13 @@
          * @cfg Boolean circle
          * 默认为false，如果设置为true，最后一帧到第一帧切换的时候会更加平滑。
          */
-        circle: false
+        circle: false,
+		
+		/**
+		 * @cfg Number viewportLen
+		 * 默认为null, 取step的值.
+		 */
+		viewportLen: null
     });
 
     /**
@@ -80,6 +86,8 @@
             // 首先显示下一张
             $(toPanel).css(OPACITY, 1);
 
+            if (fromPanel === toPanel) return;
+
             // 动画切换
             self.$anim = $(fromPanel).animate({
                 opacity: 0,
@@ -102,18 +110,15 @@
                 diff = self.viewSize[isX ? 0 : 1] * index,
                 attributes = {};
 
-            var $first, _diff;
-            if (config.circle && index == 0 && self.activeIndex == self.viewLength-1) {
-                $first = $(toPanels);
-                if (!self.$container.data('switchables-circle_appended')) {
-                    $first.parent().append( $first.clone() );
-                    self.$container.data('switchables-circle_appended', true);
-                    if (isX)
-                        $first.parent().css('width', self.viewSize[0] * (self.viewLength +1) + 'px');
-                }
+            var last2first = index == 0 && self.activeIndex == self.viewLength-1, 
+				first2last = index == self.viewLength-1 && self.activeIndex == 0,
+				_diff, diff_ = self.viewSize[isX ? 0 : 1] * self.viewLength;
+            if (last2first) {
                 _diff = diff;
-                diff = self.viewSize[isX ? 0 : 1] * self.viewLength;
-            }
+                diff = diff_;
+            } else if (first2last) {
+				self.$panels.parent().css(isX ? 'left':'top', -diff_);
+			}
 
             attributes[isX ? 'left' : 'top'] = -diff;
             $.extend(attributes, {
@@ -122,15 +127,13 @@
             });
 
             if (self.$anim) self.$anim.clearQueue();
-
-            self.$anim = self.$panels.parent().animate(attributes, function() {
-                if ($first) {
-                //  $first.parent().children(':gt('+ (self.viewLength-1) +')').remove();  //# IE8 下会有显示问题，若先设置 top 再删除多余元素
-                    $first.parent().css( isX ? 'left' : 'top', _diff);
-                    $first = null;
+//self.paused=true;
+            self.$anim = self.$panels.parent().animate(attributes, config.duration*1000, function() {
+                if (last2first) {
+                    self.$panels.parent().css( isX ? 'left' : 'top', _diff);
                 }
                 self.$anim = null; // free
-                callback();
+                callback();//self.paused=false;
             });
         }
         
@@ -153,11 +156,12 @@
                 fromIndex = activeIndex * step,
                 toIndex = fromIndex + step - 1,
                 panelLength = $panels.length;
-
+_s = host;
+			config.viewportLen = config.viewportLen || config.step;
             // 1. 获取高宽
             host.viewSize = [
-                config.viewSize[0] || $panels.outerWidth() * step,
-                config.viewSize[1] || $panels.outerHeight()* step
+                config.viewSize[0] || $panels.outerWidth(true) * step,
+                config.viewSize[1] || $panels.outerHeight(true)* step
             ];
             // 注：所有 panel 的尺寸应该相同
             //    最好指定第一个 panel 的 width 和 height，因为 Safari 下，图片未加载时，读取的 offsetHeight 等值会不对
@@ -182,7 +186,16 @@
 
                             // 设置最大宽度，以保证有空间让 panels 水平排布
                             $panels.parent().css('width', host.viewSize[0] * host.viewLength + 'px');
+							$panels.parent().css('width',
+								host.viewSize[0] * (host.viewLength + (config.viewportLen || 1)) + 'px');
                         }
+
+						var $first;
+						if (config.circle) {
+							$first = $panels.slice(0, config.viewportLen);
+							$first.parent().append( $first.clone() );
+						}
+						$first = null;
                         break;
 
                     // 如果是透明效果，则初始化透明

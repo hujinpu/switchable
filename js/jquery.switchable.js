@@ -47,6 +47,9 @@
 			$.each(Switchable.Plugins, function() {
 				this._init(self);
 			});
+
+			self.switchTo(self.activeIndex);
+
 		},
 
 		_parseStructure: function() {
@@ -94,7 +97,7 @@
                         }, config.delay * 1000);
                     }, function(evt) {
                         if (self.switchTimer) clearTimeout(self.switchTimer);
-                        evt.stopPropagation();
+                        //evt.stopPropagation();
                     }); 
                 }    
             });
@@ -130,7 +133,7 @@
             // update activeIndex
             self.activeIndex = index;
 
-            self.$evtBDObject.trigger(EVENT_AFTER_SWITCH, [index]);  //# 是否还未完全实现
+            self.$evtBDObject.trigger(EVENT_AFTER_SWITCH, [index]);
         },
 
         /**
