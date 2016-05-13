@@ -4,6 +4,7 @@
  */
 (function($) {
     var Switchable = $.able.Switchable;
+    var SP = Switchable.prototype;
 
     $.extend($.fn.switchable.defaults, {
 
@@ -25,11 +26,11 @@
          */
         pauseOnHover: true
     });
-
-    Switchable.Plugins.push({
+    var AP = {
         name: 'autoplay',
 
         _init: function(host) {
+            var that = this;
             var config = host.config;
             if (!config.autoplay) return;
 
@@ -37,23 +38,38 @@
             if (config.pauseOnHover) {
 
                 host.$container.hover(function(evt) {
-                    host.paused = true;
+                    that._stop(host)
                 }, function(evt) {
                     // because target can be child of evt set container
                     if (evt.currentTarget !== evt.target && host.$container.has(evt.target).length === 0) return;
-
-                    // setTimeout interval 是为了确保自动播放的间隔不会小于间隔时间
-                    setTimeout(function() {
-                        host.paused = false;
-                    }, config.interval * 1000);
+                      that._play(host);
                 });
             }
 
-            // 设置自动播放
+            that._play(host);
+        },
+        _play : function(host){
+             // 设置自动播放
             host.autoplayTimer = setInterval(function() {
-                if (host.paused) return;
                 host.switchTo(host.activeIndex < host.viewLength - 1 ? host.activeIndex + 1 : 0);
-            }, config.interval * 1000, true);
+            }, host.config.interval * 1000, true);
+        },
+        _stop : function(host){
+            if (host.autoplayTimer) clearInterval(host.autoplayTimer);
+        }
+    };
+    Switchable.Plugins.push(AP);
+    $.extend(SP, {
+        /**
+         * 增加autoPlay start 和 stop方法
+         */
+        start : function() {
+            if (!this.config.autoplay) return;
+            AP._play(this);
+        },
+        stop : function() {
+            if (!this.config.autoplay) return;
+            AP._stop(this);
         }
     });
 })(jQuery);
